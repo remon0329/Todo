@@ -2,39 +2,64 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ToDoリスト</title>
+  <title>やる事リスト！</title>
+  <!-- ✅ Bootstrap CDN -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .task-item {
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    form.d-inline {
+      display: inline;
+    }
+  </style>
 </head>
 <body>
-  <h1>やる事リスト！</h1>
+  <div class="container mt-5" style="max-width: 600px;">
+    <h1 class="text-center mb-4">📝 やる事リスト！</h1>
 
-  <!-- タスク追加フォーム -->
-  <form action="/add" method="post">
-    <input type="text" name="title" placeholder="タスクを入力" required>
-    <button type="submit">追加</button>
-  </form>
+    <form action="/add" method="post" class="input-group mb-4">
+      <input type="text" name="title" class="form-control" placeholder="タスクを入力" required>
+      <button type="submit" class="btn btn-primary">追加</button>
+    </form>
 
-  <!-- タスク表示 -->
-  <ul>
-    {% for task in tasks %}
-      <li>
-        <form action="/toggle/{{ loop.index0 }}" method="get" style="display:inline;">
-          <button type="submit">
-            {% if task.done %}✅{% else %}❌{% endif %}
-          </button>
-        </form>
+    <ul class="list-unstyled">
+      {% for task in tasks %}
+        <li class="task-item bg-white shadow-sm">
+            <div class="d-flex justify-content-between align-items-center">
+            <!-- タスクタイトル -->
+            <div>
+                {% if task.done %}
+                <s>{{ task.title }}</s>
+                {% else %}
+                {{ task.title }}
+                {% endif %}
+            </div>
 
-        {% if task.done %}
-          <s>{{ task.title }}</s>
-        {% else %}
-          {{ task.title }}
-        {% endif %}
+            <div class="d-flex">
+                <form action="/toggle/{{ loop.index0 }}" method="get" class="me-2">
+                <button type="submit" class="btn btn-sm {% if task.done %}btn-success{% else %}btn-outline-secondary{% endif %}">
+                    {% if task.done %}✅{% else %}クリア{% endif %}
+                </button>
+                </form>
 
-        <!-- 削除ボタン -->
-        <form action="/delete/{{ loop.index0 }}" method="get" style="display:inline;">
-          <button type="submit">🗑️</button>
-        </form>
-      </li>
-    {% endfor %}
-  </ul>
+                <form action="/delete/{{ loop.index0 }}" method="get">
+                <button type="submit" class="btn btn-sm btn-danger">削除</button>
+                </form>
+            </div>
+            </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 </body>
 </html>

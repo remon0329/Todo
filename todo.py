@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
-tasks = []  # メモリ上のタスクリスト（DB未使用）
+tasks = []
 
 @app.route("/")
 def index():
