@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+from datetime import datetime
 
 app = Flask(__name__)
 tasks = []
@@ -11,7 +12,11 @@ def index():
 def add():
     title = request.form.get("title")
     if title:
-        tasks.append({"title": title, "done": False})
+        tasks.append({
+            "title": title,
+            "done": False,
+            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M")
+        })
     return redirect("/")
 
 @app.route("/toggle/<int:index>")
