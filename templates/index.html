@@ -21,6 +21,20 @@
     form.d-inline {
       display: inline;
     }
+
+    .fade-in {
+        animation: fadeIn 0.6s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .done-anim {
+        transition: all 0.3s ease;
+        background-color: #d4edda !important;
+    }
   </style>
 </head>
 <body>
@@ -34,7 +48,7 @@
 
     <ul class="list-unstyled">
       {% for task in tasks %}
-        <li class="task-item bg-white shadow-sm">
+        <li class="task-item bg-white shadow-sm fade-in {% if task.done %}done-anim{% endif %}">
             <div class="d-flex justify-content-between align-items-center">
             <!-- タスクタイトル -->
             <div>
@@ -66,5 +80,17 @@
       {% endfor %}
     </ul>
   </div>
+  <script>
+    document.querySelectorAll('form[action^="/delete"]').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const taskItem = form.closest('li');
+        taskItem.style.transition = "opacity 0.4s ease, transform 0.4s ease";
+        taskItem.style.opacity = 0;
+        taskItem.style.transform = "translateX(50px)";
+        setTimeout(() => form.submit(), 400);
+      });
+    });
+  </script>
 </body>
 </html>
